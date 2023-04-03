@@ -49,3 +49,9 @@ def if_number(i):
 
 result = filter(if_number, list1)
 print(list(result))
+
+# Exercise 4 variant с
+list1 = ["hello", 43, 5, 11, 10, "23", 1, "python"]
+
+number = filter(lambda i: isinstance(i, int), list1)
+print(list(number))
