@@ -28,14 +28,24 @@ list1 = ["python", "hello", "world"]
 result = list(map(convert, list1))
 print(result)
 
-# Exercise 4
+# Exercise 4 variant a
 list1 = ["hello", 43, 5, 11, 10, "23", 1, "python"]
 
 
 def filter_number(i):
-    if type(i) == int:
-        return i
+    return type(i) == int
 
 
 out_filter = filter(filter_number, list1)
 print(list(out_filter))
+
+# Exercise 4 variant b
+list1 = ["hello", 43, 5, 11, 10, "23", 1, "python"]
+
+
+def if_number(i):
+    return isinstance(i, int)
+
+
+result = filter(if_number, list1)
+print(list(result))
