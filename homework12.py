@@ -45,6 +45,7 @@ class MyContextManager(object):
         print("==========")
 
     def __enter__(self):
+        yield
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type:
