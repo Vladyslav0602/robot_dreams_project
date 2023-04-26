@@ -62,72 +62,96 @@ with MyContextManager():
 
 
 # Exercise 3 Decorator with times variant a
-def decorator(func):
-    from datetime import datetime
-
-    def inner(*args, **kwargs):
-        date_start = datetime.now()
-        print("Please enter an integer")
-        times = int(input())
-        i = 0
-        while i <= times:
-            print(f"function {func.__name__} called: {date_start.strftime('%d-%m-%Y %H:%M')}")
-            i += 1
-        func(*args, **kwargs)
-
-    return inner
-
-
-@decorator
-def func():
-    print("Helo world")
-
-
-func()
-
+# def decorator(func):
+#     from datetime import datetime
+#
+#     def inner(*args, **kwargs):
+#         date_start = datetime.now()
+#         print("Please enter an integer")
+#         times = int(input())
+#         i = 0
+#         while i <= times:
+#             print(f"function {func.__name__} called: {date_start.strftime('%d-%m-%Y %H:%M')}")
+#             i += 1
+#         func(*args, **kwargs)
+#
+#     return inner
+#
+#
+# @decorator
+# def func():
+#     print("Helo world")
+#
+#
+# func()
+#
 
 # Exercise 3 Decorator with times variant b
-def decorator(func):
-    from datetime import datetime
-
-    def inner(*args, **kwargs):
-        date_start = datetime.now()
-        print("Please enter an integer")
-        times = int(input())
-        print(f"function {func.__name__} called: {date_start.strftime('%d-%m-%Y %H:%M')}\n" * times, end=" ")
-
-        func(*args, **kwargs)
-
-    return inner
-
-
-@decorator
-def func():
-    print("Helo world")
-
-
-func()
+# def decorator(func):
+#     from datetime import datetime
+#
+#     def inner(*args, **kwargs):
+#         date_start = datetime.now()
+#         print("Please enter an integer")
+#         times = int(input())
+#         print(f"function {func.__name__} called: {date_start.strftime('%d-%m-%Y %H:%M')}\n" * times, end=" ")
+#
+#         func(*args, **kwargs)
+#
+#     return inner
+#
+#
+# @decorator
+# def func():
+#     print("Helo world")
+#
+#
+# func()
 
 
 # Exercise 3 Decorator with times variant c
-def decorator(func):
-    from datetime import datetime
+# def decorator(func):
+#     from datetime import datetime
+#
+#     def inner(*args, **kwargs):
+#         date_start = datetime.now()
+#         print("Please enter an integer")
+#         times = int(input())
+#         for _ in range(times):
+#             print(f"function {func.__name__} called: {date_start.strftime('%d-%m-%Y %H:%M')}")
+#
+#         func(*args, **kwargs)
+#
+#     return inner
+#
+#
+# @decorator
+# def func():
+#     print("Helo world")
+#
+#
+# func()
 
-    def inner(*args, **kwargs):
-        date_start = datetime.now()
-        print("Please enter an integer")
-        times = int(input())
-        for _ in range(times):
-            print(f"function {func.__name__} called: {date_start.strftime('%d-%m-%Y %H:%M')}")
 
-        func(*args, **kwargs)
+# Exercise 3 Decorator with time. Worked on bugs
+import functools
 
-    return inner
+def repeater(times=4):
+    def decorator(func):
+        from datetime import datetime
+        @functools.wraps(func)
+        def inner(*args, **kwargs):
+            date_start = datetime.now()
+            for i in range(times):
+                print(f"function {func.__name__} called: {date_start.strftime('%d-%m-%Y %H:%M')}")
+            lav = func(*args, **kwargs)
+            return lav
+        return inner
+    return decorator
 
 
-@decorator
-def func():
-    print("Helo world")
+@repeater(4)
+def hello():
+    print("Hello world")
 
-
-func()
+hello()
