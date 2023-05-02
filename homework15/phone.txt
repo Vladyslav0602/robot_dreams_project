@@ -1,0 +1,1 @@
+[{"name": "anna", "phone": "380973813556"}, {"name": "vlad", "phone": "+380671102300"}, {"name": "artur", "phone": "0973813554"}, {"name": "misha", "phone": "380662552511"}]
