@@ -1,0 +1,24 @@
+Exercise 2 Requests
+
+INSERT INTO users(id, first_name, last_name, age)
+   VALUES('1', 'Alex', 'Smith', '22');
+INSERT INTO users(id, first_name, last_name, age)
+   VALUES('2', 'Anna', 'Grey', '20');
+INSERT INTO users(id, first_name, last_name, age)
+   VALUES('3', 'Vlad', 'Kutsyi', '23');
+INSERT INTO users(id, first_name, last_name, age)
+   VALUES('4', 'Tomas', 'One', '18');
+INSERT INTO users(id, first_name, last_name, age)
+   VALUES('5', 'Ivan', 'Fox', '20');
+INSERT INTO users(id, first_name, last_name, age)
+   VALUES('6', 'Roman', 'Good', '27');
+
+DELETE from users where id = 6;
+
+SELECT * FROM users;
+
+SELECT first_name FROM users;
+
+SELECT * FROM users WHERE id=1;
+
+
