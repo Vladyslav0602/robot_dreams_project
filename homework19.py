@@ -53,12 +53,9 @@ class TelegramBot(Bot):
 
 
 # Exercise 3 variant b
-class MyStr:
-    def __init__(self, some_string):
-        self.string = some_string
-
+class MyStr(str):
     def __str__(self):
-        return self.string.upper()
+        return self.upper()
 
 
 # my_str = MyStr("hello")
