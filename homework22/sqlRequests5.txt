@@ -1,7 +1,7 @@
 Exercise 2
 
-SELECT * FROM (SELECT age, COUNT(age) as user
+SELECT age, COUNT(age) as user
 FROM users
 GROUP BY age
-ORDER BY user DESC ,age ASC)
-WHERE user>1;
+HAVING user>1;
+ORDER BY user DESC ,age ASC
