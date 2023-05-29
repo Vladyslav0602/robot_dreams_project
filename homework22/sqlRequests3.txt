@@ -1,0 +1,3 @@
+Exercise 3
+
+SELECT age, COUNT(*) as user FROM users GROUP BY age;

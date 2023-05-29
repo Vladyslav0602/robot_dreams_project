@@ -1,0 +1,6 @@
+Exercise 4
+
+SELECT age, COUNT(*) as user
+FROM users
+GROUP BY age
+ORDER BY user DESC ,age ASC;

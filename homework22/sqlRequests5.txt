@@ -1,0 +1,7 @@
+Exercise 2
+
+SELECT age, COUNT(age) as user
+FROM users
+GROUP BY age
+HAVING user>1;
+ORDER BY user DESC ,age ASC
