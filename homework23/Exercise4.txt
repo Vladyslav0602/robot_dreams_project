@@ -1,0 +1,41 @@
+Exercise 4-1
+
+SELECT users.id, users.first_name, users.last_name, SUM(books.price) as total_purchases
+FROM ((users
+INNER JOIN purchase ON users.id = purchase.user_id)
+INNER JOIN books ON users.id = books.id)
+GROUP BY users.id;
+
+Exercise 4-2
+
+SELECT users.id, COUNT(books.title) as purchases_count
+FROM ((users
+INNER JOIN purchase ON users.id = purchase.user_id)
+INNER JOIN books ON users.id = books.id)
+GROUP BY users.id;
+
+Exercise 4-3
+
+SELECT books.author, COUNT(books.title) as amount
+FROM ((users
+INNER JOIN purchase ON users.id = purchase.user_id)
+INNER JOIN books ON users.id = books.id)
+WHERE author='Rowling';
+
+Exercise 4-4
+
+SELECT books.author, COUNT(books.title) as sales_quantity, SUM(books.price) as total_amount
+FROM ((users
+INNER JOIN purchase ON users.id = purchase.user_id)
+INNER JOIN books ON users.id = books.id)
+GROUP BY books.author;
+
+Exercise 4-5
+
+SELECT books.title, COUNT(books.title) as sales_quantity
+FROM ((users
+INNER JOIN purchase ON users.id = purchase.user_id)
+INNER JOIN books ON users.id = books.id)
+GROUP BY books.title
+ORDER BY books.title ASC, sales_quantity DESC;
+
