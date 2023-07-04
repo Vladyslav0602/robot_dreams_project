@@ -5,58 +5,63 @@ app = Flask(__name__, template_folder='template_html')
 
 
 # Exercise 1
-@app.route('/users', methods=['GET'])
+@app.get('/users')
 def get_users():
     names = ['Alice', 'Anna', 'Vitalij', 'Vlad', 'Bob']
+    count = random.randint(1, len(names))
     random.shuffle(names)
-    return ', '.join(names)
+    return ', '.join(names[:count])
 
 
-@app.route('/books', methods=['GET'])
+@app.get('/books')
 def get_books():
     books = ['Kobzar', 'Harry Potter', 'Abetka', 'Witcher', 'Alice in Wonderland']
+    count = random.randint(1, len(books))
     random.shuffle(books)
     html_list = '<ul>'
-    for book in books:
+    for book in books[:count]:
         html_list += f'<li>{book}</li>'
     html_list += '</ul>'
     return html_list
 
 
 # Exercise 2
-@app.route('/users/id', methods=['GET'])
-def get_users_by_id():
-    user_id = request.args.get('id')
-    if user_id:
-        user_id = int(user_id)
-        if user_id % 2 == 0:
-            return f'Text with id: {user_id}'
-        else:
-            abort(404)
+@app.get('/users_id/<int:id>')
+def get_user_by_id(id):
+    if id % 2 == 0:
+        return f'Text with id: {id}'
     else:
-        names = ['Alice', 'Anna', 'Vitalij', 'Vlad', 'Bob']
-        random.shuffle(names)
-        return ', '.join(names)
+        abort(404)
 
 
-@app.route('/books/title', methods=['GET'])
-def get_books_by_title():
-    title = request.args.get('title')
-    if title:
+# @app.get('/books/<title>')
+# def get_books_by_title(title):
+#     title = request.args.get('title')
+#     if title:
+#         transformed_title = title.capitalize()
+#         return transformed_title
+#     else:
+#         books = ['Kobzar', 'Harry Potter', 'Abetka', 'Witcher', 'Alice in Wonderland']
+#         random.shuffle(books)
+#         html_list = '<ul>'
+#         for book in books:
+#             html_list += f'<li>{book}</li>'
+#         html_list += '</ul>'
+#         return html_list
+
+@app.route('/books/<string:title>', methods=['GET'])
+def transform_title(title):
+    books = ['kobzar', 'harry Potter', 'abetka', 'witcher', 'alice in Wonderland']
+    result = books.count(title)
+    if result > 0:
         transformed_title = title.capitalize()
         return transformed_title
     else:
-        books = ['Kobzar', 'Harry Potter', 'Abetka', 'Witcher', 'Alice in Wonderland']
-        random.shuffle(books)
-        html_list = '<ul>'
-        for book in books:
-            html_list += f'<li>{book}</li>'
-        html_list += '</ul>'
-        return html_list
+        abort(500)
 
 
 # Exercise 3
-@app.route('/params', methods=['GET'])
+@app.get('/params')
 def get_params():
     params = request.args
     return render_template('params.html', params=params)
@@ -112,43 +117,40 @@ def home():
     '''
 
 
-# Exercise 7
-@app.route('/users/count', methods=['GET'])
-def get_users_with_count():
-    count = request.args.get('count')
-    if count:
-        count = int(count)
-    else:
-        count = random.randint(1, 10)  # Рандомна кількість, якщо параметр не передано
+# Exercise 7 Corrected Method get_users
+@app.get('/users/<int:count>')
+def get_users_count(count):
+    names = ['Alice', 'Anna', 'Vitalij', 'Vlad', 'Bob']
 
-    if request.args.get('id'):
-        user_id = int(request.args.get('id'))
-        if user_id % 2 == 0:
-            return f'Text with id: {user_id}'
-        else:
-            abort(404)
+    if count > 0:
+        count = min(count, len(names))
+        selected_names = random.sample(names, count)
+        return ', '.join(selected_names)
     else:
-        names = ['Alice', 'Anna', 'Vitalij', 'Vlad', 'Bob']
         random.shuffle(names)
-        return ', '.join(names[:count])
+        return ', '.join(names)
 
 
-@app.route('/books/count', methods=['GET'])
-def get_books_with_count():
-    count = request.args.get('count')
-    if count:
-        count = int(count)
+# Corrected Method get_books
+@app.get('/books/<int:count>')
+def get_books_count(count):
+    books = ['Kobzar', 'Harry Potter', 'Abetka', 'Witcher', 'Alice in Wonderland']
+
+    if count > 0:
+        count = min(count, len(books))
+        selected_books = random.sample(books, count)
+        html_list = '<ul>'
+        for book in selected_books:
+            html_list += f'<li>{book}</li>'
+        html_list += '</ul>'
+        return html_list
     else:
-        count = random.randint(1, 10)  # Рандомна кількість, якщо параметр не передано
-
-    if request.args.get('title'):
-        title = request.args.get('title')
-        transformed_title = title.capitalize()
-        return transformed_title
-    else:
-        books = ['Kobzar', 'Harry Potter', 'Abetka', 'Witcher', 'Alice in Wonderland']
         random.shuffle(books)
-        return ', '.join(books[:count])
+        html_list = '<ul>'
+        for book in books:
+            html_list += f'<li>{book}</li>'
+        html_list += '</ul>'
+        return html_list
 
 
 # Exercise 8
