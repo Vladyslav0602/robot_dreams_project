@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='users_books_id.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Users Page</h1>
+        {{ greeting|safe }}
+        {{ logout_btn|safe }}
+        <p>{% for user in users %} {{ user }} {% endfor %}</p>
+    </div>
+</body>
+</html>
