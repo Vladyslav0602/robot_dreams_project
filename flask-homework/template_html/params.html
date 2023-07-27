@@ -1,34 +1,29 @@
+<!-- params.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Query Parameters</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 50%;
-            margin: 20px auto;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+  <title>Params</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='params.css') }}">
 </head>
 <body>
-    <h1>Query Parameters</h1>
+  <div class="container">
+    <div class="header">
+      <div class="greeting">Hello, {{ session['username'] }}
+        <a class="logout-btn" href="/logout">Logout</a></div>
+    </div>
+    <h1>Params</h1>
     <table>
+      <tr>
+        <th>Parameter</th>
+        <th>Value</th>
+      </tr>
+      {% for key, value in params.items() %}
         <tr>
-            <th>Parameter</th>
-            <th>Value</th>
+          <td>{{ key }}</td>
+          <td>{{ value }}</td>
         </tr>
-        {% for key, value in params.items() %}
-        <tr>
-            <td>{{ key }}</td>
-            <td>{{ value }}</td>
-        </tr>
-        {% endfor %}
+      {% endfor %}
     </table>
+  </div>
 </body>
 </html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='users_books.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Users Page</h1>
+        {{ greeting|safe }}
+        {{ logout_btn|safe }}
+        <p>{{ ', '.join(names[:count]) }}</p>
+    </div>
+</body>
+</html>
+

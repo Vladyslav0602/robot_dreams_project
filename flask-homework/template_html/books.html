@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <title>Books</title>
+            <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='users_books.css') }}">
+        </head>
+        <body>
+            <div class="container">
+                <h1>Books Page</h1>
+                {{ greeting|safe }}
+                {{ logout_btn|safe }}
+                {{ html_list|safe }}
+            </div>
+        </body>
+        </html>
