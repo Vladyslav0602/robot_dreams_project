@@ -13,11 +13,11 @@ class Purchase(models.Model):
         ordering = ['-purchase_date']
 
     def __str__(self):
-        return f"{self.user.name} - {self.book.title} - {self.purchase_date}"
+        return f"{self.user.username} - {self.book.title} - {self.purchase_date}"
 
     def serialize(self):
         return {
-            'user': self.user.name,
+            'user': self.user.username,
             'book': self.book.title,
             'purchase_date': self.purchase_date.strftime('%Y-%m-%d %H:%M:%S'),
         }
