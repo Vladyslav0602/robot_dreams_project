@@ -1,33 +1,53 @@
-from django.http import JsonResponse
-from .models import User
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView
+from .models import CustomUser
+from .forms import CustomUserForm
 
 
-# def users_view(request):
-#     return HttpResponse("Hello, users!")
+class CustomUserListView(ListView):
+    model = CustomUser
+    template_name = 'user/user_list.html'
+    context_object_name = 'users'
 
 
-def users_view(request):
-    users = User.objects.all()
-    data = [{"name": user.name, "email": user.email} for user in users]
-    return JsonResponse(data, safe=False)
+class CustomUserDetailView(DetailView):
+    model = CustomUser
+    template_name = 'user/user_detail.html'
+    context_object_name = 'user'
 
 
-def create_users(request):
-    # Створюємо список користувачів для заповнення таблиці
-    users_to_create = [
-        User(name='John', email='john@example.com'),
-        User(name='Alice', email='alice@example.com'),
-        User(name='Bob', email='bob@example.com'),
-        User(name='Mary', email='mary@example.com'),
-        User(name='Michael', email='michael@example.com'),
-        User(name='Emma', email='emma@example.com'),
-        User(name='David', email='david@example.com'),
-        User(name='Olivia', email='olivia@example.com'),
-        User(name='William', email='william@example.com'),
-        User(name='Sophia', email='sophia@example.com'),
-    ]
+class CreateUserView(CreateView):
+    model = CustomUser
+    template_name = 'user/create_user.html'
+    fields = ['username', 'email']
 
-    # Зберігаємо об'єкти в базі даних
-    User.objects.bulk_create(users_to_create)
+    def get(self, request):
+        form = CustomUserForm()
+        return render(request, 'user/create_user.html', {'form': form})
 
-    return JsonResponse("Дані про користувачів були додані до бази даних.")
+    def post(self, request):
+        form = CustomUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('user_list')
+        return render(request, 'user/create_user.html', {'form': form})
+
+
+# def create_users(request):
+#     # Створюємо список користувачів для заповнення таблиці
+#     users_to_create = [
+#         CustomUser(username='John', email='john@example.com'),
+#         CustomUser(username='Alice', email='alice@example.com'),
+#         CustomUser(username='Bob', email='bob@example.com'),
+#         CustomUser(username='Mary', email='mary@example.com'),
+#         CustomUser(username='Michael', email='michael@example.com'),
+#         CustomUser(username='Emma', email='emma@example.com'),
+#         CustomUser(username='David', email='david@example.com'),
+#         CustomUser(username='Olivia', email='olivia@example.com'),
+#         CustomUser(username='William', email='william@example.com'),
+#         CustomUser(username='Sophia', email='sophia@example.com'),
+#     ]
+#
+#     CustomUser.objects.bulk_create(users_to_create)
+#
+#     return JsonResponse("Дані про користувачів були додані до бази даних.")
