@@ -1,37 +1,47 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
-from .models import CustomUser
 from .forms import CustomUserForm
+from rest_framework import generics
+from .models import CustomUser
+from .serializers import CustomUserSerializer
+
+# class CustomUserListView(ListView):
+#     model = CustomUser
+#     template_name = 'user/user_list.html'
+#     context_object_name = 'users'
+#
+#
+# class CustomUserDetailView(DetailView):
+#     model = CustomUser
+#     template_name = 'user/user_detail.html'
+#     context_object_name = 'user'
+#
+#
+# class CreateUserView(CreateView):
+#     model = CustomUser
+#     template_name = 'user/create_user.html'
+#     fields = ['username', 'email']
+#
+#     def get(self, request):
+#         form = CustomUserForm()
+#         return render(request, 'user/create_user.html', {'form': form})
+#
+#     def post(self, request):
+#         form = CustomUserForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('user_list')
+#         return render(request, 'user/create_user.html', {'form': form})
 
 
-class CustomUserListView(ListView):
-    model = CustomUser
-    template_name = 'user/user_list.html'
-    context_object_name = 'users'
+class CustomUserView(generics.ListCreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
 
-class CustomUserDetailView(DetailView):
-    model = CustomUser
-    template_name = 'user/user_detail.html'
-    context_object_name = 'user'
-
-
-class CreateUserView(CreateView):
-    model = CustomUser
-    template_name = 'user/create_user.html'
-    fields = ['username', 'email']
-
-    def get(self, request):
-        form = CustomUserForm()
-        return render(request, 'user/create_user.html', {'form': form})
-
-    def post(self, request):
-        form = CustomUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('user_list')
-        return render(request, 'user/create_user.html', {'form': form})
-
+class CustomUserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
 # def create_users(request):
 #     # Створюємо список користувачів для заповнення таблиці

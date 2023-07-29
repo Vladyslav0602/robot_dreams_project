@@ -1,37 +1,49 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
-
 from .models import Book
 from .forms import BookForm
+from rest_framework import generics
+from .serializers import BookSerializer
 
 
-class BookListView(ListView):
-    model = Book
-    template_name = 'book/book_list.html'
-    context_object_name = 'books'
+# class BookListView(ListView):
+#     model = Book
+#     template_name = 'book/book_list.html'
+#     context_object_name = 'books'
+#
+#
+# class BookDetailView(DetailView):
+#     model = Book
+#     template_name = 'book/book_detail.html'
+#     context_object_name = 'book'
+#
+#
+# class CreateBookView(CreateView):
+#     model = Book
+#     template_name = 'book/create_book.html'
+#     fields = ['title', 'author', 'genre']
+#
+#     def get(self, request):
+#         form = BookForm()
+#         return render(request, 'book/create_book.html', {'form': form})
+#
+#     def post(self, request):
+#         form = BookForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('book_list')
+#         return render(request, 'book/create_book.html', {'form': form})
 
 
-class BookDetailView(DetailView):
-    model = Book
-    template_name = 'book/book_detail.html'
-    context_object_name = 'book'
+class BookView(generics.ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
 
 
-class CreateBookView(CreateView):
-    model = Book
-    template_name = 'book/create_book.html'
-    fields = ['title', 'author', 'genre']
+class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
 
-    def get(self, request):
-        form = BookForm()
-        return render(request, 'book/create_book.html', {'form': form})
-
-    def post(self, request):
-        form = BookForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('book_list')
-        return render(request, 'book/create_book.html', {'form': form})
 
 # def create_books(request):
 #     # Генеруємо рандомні ціни для кожної книги у діапазоні від 10 до 100
