@@ -1,10 +1,38 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import CreateView, ListView, DetailView
-from .forms import PurchaseForm
-from rest_framework import generics
 from .models import Purchase
 from .serializers import PurchaseSerializer
+from rest_framework import viewsets
+from django_filters import rest_framework as filters
 
+
+class PurchaseFilter(filters.FilterSet):
+    user__username = filters.CharFilter(field_name='user__username', lookup_expr='icontains')
+    book__title = filters.CharFilter(field_name='book__title', lookup_expr='icontains')
+    purchase_date = filters.DateFilter()
+
+    class Meta:
+        model = Purchase
+        fields = ['user__username', 'book__title', 'purchase_date']
+
+
+class PurchaseViewSet(viewsets.ModelViewSet):
+    queryset = Purchase.objects.all()
+    serializer_class = PurchaseSerializer
+    filterset_class = PurchaseFilter
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        user__username = self.request.query_params.get('user__username')
+        book__title = self.request.query_params.get('book__title')
+        purchase_date = self.request.query_params.get('purchase_date')
+
+        if user__username:
+            queryset = queryset.filter(user__username__icontains=user__username)
+        if book__title:
+            queryset = queryset.filter(book__title__icontains=book__title)
+        if purchase_date:
+            queryset = queryset.filter(purchase_date=purchase_date)
+
+        return queryset
 
 # class PurchaseListView(ListView):
 #     def get(self, request):
@@ -35,14 +63,15 @@ from .serializers import PurchaseSerializer
 #         return render(request, 'purchase/create_purchase.html', {'form': form})
 
 
-class PurchaseView(generics.ListCreateAPIView):
-    queryset = Purchase.objects.all()
-    serializer_class = PurchaseSerializer
+# class PurchaseView(generics.ListCreateAPIView):
+#     queryset = Purchase.objects.all()
+#     serializer_class = PurchaseSerializer
+#
+#
+# class PurchaseDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Purchase.objects.all()
+#     serializer_class = PurchaseSerializer
 
-
-class PurchaseDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Purchase.objects.all()
-    serializer_class = PurchaseSerializer
 
 # def create_purchases(request):
 #     # Отримуємо список користувачів та книжок, щоб створити зв'язані записи у таблиці "Purchase"

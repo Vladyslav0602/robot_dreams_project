@@ -1,10 +1,38 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView
-from .models import Book
-from .forms import BookForm
-from rest_framework import generics
 from .serializers import BookSerializer
+from rest_framework import viewsets
+from .models import Book
+from django_filters import rest_framework as filters
 
+
+class BookFilter(filters.FilterSet):
+    title = filters.CharFilter(lookup_expr='icontains')
+    author = filters.CharFilter(lookup_expr='icontains')
+    price = filters.NumberFilter()
+
+    class Meta:
+        model = Book
+        fields = ['title', 'author', 'price']
+
+
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    filterset_class = BookFilter
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        title = self.request.query_params.get('title')
+        author = self.request.query_params.get('author')
+        price = self.request.query_params.get('price')
+
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+        if author:
+            queryset = queryset.filter(author__icontains=author)
+        if price:
+            queryset = queryset.filter(price=price)
+
+        return queryset
 
 # class BookListView(ListView):
 #     model = Book
@@ -35,14 +63,14 @@ from .serializers import BookSerializer
 #         return render(request, 'book/create_book.html', {'form': form})
 
 
-class BookView(generics.ListCreateAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-
-
-class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
+# class BookView(generics.ListCreateAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializer
+#
+#
+# class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializer
 
 
 # def create_books(request):

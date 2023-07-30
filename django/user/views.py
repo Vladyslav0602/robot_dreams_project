@@ -1,9 +1,36 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, CreateView
-from .forms import CustomUserForm
-from rest_framework import generics
 from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, CustomUserPagination
+from rest_framework import viewsets
+from django_filters import rest_framework as filters
+
+
+class CustomUserFilter(filters.FilterSet):
+    username = filters.CharFilter(lookup_expr='icontains')
+    email = filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email']
+
+
+class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    pagination_class = CustomUserPagination
+    filterset_class = CustomUserFilter
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        username = self.request.query_params.get('username')
+        email = self.request.query_params.get('email')
+
+        if username:
+            queryset = queryset.filter(username__icontains=username)
+        if email:
+            queryset = queryset.filter(email__icontains=email)
+
+        return queryset
+
 
 # class CustomUserListView(ListView):
 #     model = CustomUser
@@ -34,14 +61,15 @@ from .serializers import CustomUserSerializer
 #         return render(request, 'user/create_user.html', {'form': form})
 
 
-class CustomUserView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+# class CustomUserView(generics.ListCreateAPIView):
+#     queryset = CustomUser.objects.all()
+#     serializer_class = CustomUserSerializer
+#
+#
+# class CustomUserDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = CustomUser.objects.all()
+#     serializer_class = CustomUserSerializer
 
-
-class CustomUserDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
 
 # def create_users(request):
 #     # Створюємо список користувачів для заповнення таблиці
