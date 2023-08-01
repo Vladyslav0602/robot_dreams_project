@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Purchase Detail</title>
+</head>
+<body>
+    <h1>Purchase Detail</h1>
+    <p>User: {{ purchase.user.name }}</p>
+    <p>Book: {{ purchase.book.title }}</p>
+    <p>Price: {{ purchase.book.price }}</p>
+    <p>Purchase Date: {{ purchase.purchase_date }}</p>
+    <p><a href="{% url 'purchase_list' %}">Back to Purchase List</a></p>
+</body>
+</html>
