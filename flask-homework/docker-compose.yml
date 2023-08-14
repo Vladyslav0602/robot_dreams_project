@@ -1,0 +1,26 @@
+version: '3'
+services:
+  flask-app:
+    build: .
+    ports:
+      - "4200:4200"
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - flask-app
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: yourdb
+      POSTGRES_USER: youruser
+      POSTGRES_PASSWORD: yourpassword
