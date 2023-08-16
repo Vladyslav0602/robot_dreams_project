@@ -128,7 +128,7 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Шлях до папки, де знаходиться файл settings.py
-BASE_DIR = Path(__file__).resolve().parent
+# BASE_DIR = Path(__file__).resolve().parent
 
 # Шлях до папки для збереження celerybeat-schedule
 CELERY_BEAT_SCHEDULE_FILENAME = BASE_DIR / 'celerybeat-schedule'

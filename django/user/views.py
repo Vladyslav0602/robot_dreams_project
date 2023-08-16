@@ -4,6 +4,15 @@ from .models import CustomUser
 from purchase.models import Purchase
 from django.http import JsonResponse
 
+from rest_framework import viewsets
+from .models import CustomUser
+from .serializers import CustomUserSerializer
+
+
+class CustomUserViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
 
 def send_welcome_email_view(request):
     result = send_welcome_email.delay()
@@ -25,7 +34,6 @@ def print_user_count_view(request):
 
 def task_result_view(request, result):
     return render(request, 'user/result.html', {'message': result.get()})
-
 
 # from .models import CustomUser
 # from .serializers import CustomUserSerializer, CustomUserPagination
